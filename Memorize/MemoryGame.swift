@@ -12,25 +12,27 @@ struct MemoryGame <CardContent> {
     
     mutating func choose(_ card: Card){
         //card.isFaceUp.toggle()//All arguments to functions are lets
-        let chosenIndex = index(of: card)
-        //var chosenCard = cards[chosenIndex]//only cards[chosenIndex] copies the struct
-        // instead of accessing it directly
-        //cards[chosenIndex] needs to be changed directly instead of assigning its value
-        //to a var
-        cards[chosenIndex].isFaceUp.toggle()//mutating 'self'(function arg) here;
-        //that's why mutating func instead of just func
-        //chosenCard.isFaceUp.toggle()
-        print("\(cards) ")
+        //let chosenIndex = index(of: card)! //some chosen; if nil, program crashes
+        if let chosenIndex = index(of: card){
+            //var chosenCard = cards[chosenIndex]//only cards[chosenIndex] copies the struct
+            // instead of accessing it directly
+            //cards[chosenIndex] needs to be changed directly instead of assigning its value
+            //to a var
+            cards[chosenIndex].isFaceUp.toggle()//mutating 'self'(function arg) here;
+            //that's why mutating func instead of just func
+            //chosenCard.isFaceUp.toggle()
+            print("\(cards) ")
+        }
     }
     
-    func index( of card : Card ) -> Int {
+    func index( of card : Card ) -> Int? {
         
         for index in 0..<cards.count {
             if cards[index].id == card.id {
                 return index
             }
         }
-        return 0
+        return nil
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int)->CardContent){
