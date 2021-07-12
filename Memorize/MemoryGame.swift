@@ -7,38 +7,42 @@
 
 import Foundation
 
-struct MemoryGame <CardContent> {
-    private(set) var cards: Array<Card>
+struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent argument needs to be passed from outside
+                                    //bcz it's dont care type (generics)
+                                    //MemoryGame is of generic type
+    private(set) var cards: Array<Card> //private(set) makes a variable read only
     
-    mutating func choose(_ card: Card){
-        //card.isFaceUp.toggle()//All arguments to functions are lets
-        //let chosenIndex = index(of: card)! //some chosen; if nil, program crashes
-        if let chosenIndex = index(of: card){
-            //var chosenCard = cards[chosenIndex]//only cards[chosenIndex] copies the struct
-            // instead of accessing it directly
-            //cards[chosenIndex] needs to be changed directly instead of assigning its value
-            //to a var
-            cards[chosenIndex].isFaceUp.toggle()//mutating 'self'(function arg) here;
-            //that's why mutating func instead of just func
-            //chosenCard.isFaceUp.toggle()
-            print("\(cards) ")
-        }
-    }
+    private var indexOfTheOneAndOnlyFaceUpCard: Int?
     
-    func index( of card : Card ) -> Int? {
-        
-        for index in 0..<cards.count {
-            if cards[index].id == card.id {
-                return index
+    mutating func choose(_ card: Card) {
+       if let chosenIndex = cards.firstIndex( where: {$0.id == card.id} ),
+            !cards[chosenIndex].isMatched,
+            !cards[chosenIndex].isFaceUp
+        {
+            
+            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                    cards[chosenIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+                indexOfTheOneAndOnlyFaceUpCard = nil
+            } else {
+                for index in cards.indices {
+                //for index in 0..<cards.count{
+                    cards[index].isFaceUp = false
+                }
+                indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
-        }
-        return nil
+        
+           cards[chosenIndex].isFaceUp.toggle()//mutating 'self'(function arg) here;
+       }
+        print("\(cards) ")
     }
-    
-    init(numberOfPairsOfCards: Int, createCardContent: (Int)->CardContent){
+   
+    init(numberOfPairsOfCards: Int, createCardContent: (Int)->CardContent) {
         cards = Array<Card>()
         
-        for pairIndex in 0..<numberOfPairsOfCards{
+        for pairIndex in 0..<numberOfPairsOfCards {
             let content = createCardContent(pairIndex)
             cards.append(Card( content: content, id: pairIndex*2))
             cards.append(Card( content: content, id: pairIndex*2+1))
@@ -46,9 +50,7 @@ struct MemoryGame <CardContent> {
     }
     
     struct Card: Identifiable {
-        
-        
-        var isFaceUp: Bool = true
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent //dont care
         var id: Int

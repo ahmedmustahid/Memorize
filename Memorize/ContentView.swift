@@ -53,7 +53,10 @@ struct ContentView: View {
                     //Text("🤣")
                     Text(card.content)
                         .font(.largeTitle)
-                } else {
+                } else if card.isMatched {
+                    shape.opacity(0)
+                }
+                else {
                     //RoundedRectangle(cornerRadius: 20.0)
                     shape.fill()
                 }

@@ -24,12 +24,15 @@ class EmojiMemoryGame: ObservableObject { //used to publish the chenged model to
     static func createMemoryGame() -> MemoryGame<String> {
         MemoryGame<String>(numberOfPairsOfCards: 4) {
             pairIndex  in
-            EmojiMemoryGame.emojis[pairIndex]
+            //EmojiMemoryGame.emojis[pairIndex] ; can be done when static is called from inside another static
+            emojis[pairIndex]
         }
     }
     
 //    private var model: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
-    @Published private var model: MemoryGame<String> = createMemoryGame() //can be done only during initialization/ accessing static inside
+    //all vars of type class must have value;OR it'll require init. for struct assigning value isnt necessary.
+    //for structs values are passed when they are called
+    @Published private var model: MemoryGame<String> = createMemoryGame() //can be done only instead of EmojiMemoryGame.createMemoryGame during initialization/ accessing static inside
     //another static
     //using var instead of let; because MemoryGame is mutating cards
     //let would have turned model into immutable
