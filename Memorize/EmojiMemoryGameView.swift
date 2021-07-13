@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct EmojiMemoryGameView: View {
     //var emojis: Array<String> = ["🤣","😜","🤩"]
     //var emojis: [String] = ["🤣","😜","🤩"]
 //    var emojis = ["🤣","😜","🤩","😀","😇","😅","😍","😘","🥰","😤","😡","🤬","🤯","🤗","🤔","🤭","🤫","🤥","😲"]
@@ -15,18 +15,18 @@ struct ContentView: View {
     
     //@ObservedObject let viewModel: EmojiMemoryGame
     //Property wrapper can only be applied to a 'var'
-    @ObservedObject var viewModel: EmojiMemoryGame
+    @ObservedObject var game: EmojiMemoryGame
     var body: some View {
 //        VStack{
 
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))] ) {
                 //CardView(isFaceUp: false)
-                ForEach(viewModel.cards) { card in
+                ForEach(game.cards) { card in
                     CardView(card: card)
                         .aspectRatio(2/3,contentMode: .fit)
                         .onTapGesture {
-                            viewModel.choose(card)
+                            game.choose(card)
                         }
                 }
 
@@ -37,7 +37,10 @@ struct ContentView: View {
 }
     
     struct CardView: View {
-        let card: MemoryGame<String>.Card
+        //private let card: EmojiMemoryGame.Card
+        let card: EmojiMemoryGame.Card
+
+       
         var body: some View{
             ZStack {
                 
@@ -70,9 +73,9 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         
         let game = EmojiMemoryGame()
-        ContentView(viewModel: game)
+        EmojiMemoryGameView(game: game)
             .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
-        ContentView(viewModel: game)
+        EmojiMemoryGameView(game: game)
             .preferredColorScheme(.light)
     }
 }

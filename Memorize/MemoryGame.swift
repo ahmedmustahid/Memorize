@@ -36,12 +36,12 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
         
            cards[chosenIndex].isFaceUp.toggle()//mutating 'self'(function arg) here;
        }
-        print("\(cards) ")
     }
    
     init(numberOfPairsOfCards: Int, createCardContent: (Int)->CardContent) {
-        cards = Array<Card>()
-        
+        cards = [] //swift already knows it's an array of card, so empty array of cards
+        //cards = Array<Card>()
+
         for pairIndex in 0..<numberOfPairsOfCards {
             let content = createCardContent(pairIndex)
             cards.append(Card( content: content, id: pairIndex*2))
@@ -50,9 +50,10 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
     }
     
     struct Card: Identifiable {
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
-        var content: CardContent //dont care
-        var id: Int
+        var isFaceUp = false //type inference
+        //var isFaceUp: Bool = false
+        var isMatched = false
+        let content: CardContent //dont care
+        let id: Int
     }
 }

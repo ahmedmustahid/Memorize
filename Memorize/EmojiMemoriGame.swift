@@ -18,10 +18,11 @@ func makeCardContent(index: Int)-> String{
 class EmojiMemoryGame: ObservableObject { //used to publish the chenged model to the world
     //privat(set) var model: MemoryGame<String>
     //type variable
-    static let emojis = ["🤣","😜","🤩","😀","😇","😅","😍","😘","🥰","😤","😡","🤬","🤯","🤗","🤔","🤭","🤫","🤥","😲"]
+    typealias Card = MemoryGame<String>.Card
+    private static let emojis = ["🤣","😜","🤩","😀","😇","😅","😍","😘","🥰","😤","😡","🤬","🤯","🤗","🤔","🤭","🤫","🤥","😲"]
     
     //type function
-    static func createMemoryGame() -> MemoryGame<String> {
+    private static func createMemoryGame() -> MemoryGame<String> {
         MemoryGame<String>(numberOfPairsOfCards: 4) {
             pairIndex  in
             //EmojiMemoryGame.emojis[pairIndex] ; can be done when static is called from inside another static
@@ -32,7 +33,8 @@ class EmojiMemoryGame: ObservableObject { //used to publish the chenged model to
 //    private var model: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
     //all vars of type class must have value;OR it'll require init. for struct assigning value isnt necessary.
     //for structs values are passed when they are called
-    @Published private var model: MemoryGame<String> = createMemoryGame() //can be done only instead of EmojiMemoryGame.createMemoryGame during initialization/ accessing static inside
+    @Published private var model = createMemoryGame() //can be done only instead of EmojiMemoryGame.createMemoryGame during initialization/ accessing static inside //type inference
+    //@Published private var model: MemoryGame<String> = createMemoryGame() //can be done only instead of EmojiMemoryGame.createMemoryGame during initialization/ accessing static inside
     //another static
     //using var instead of let; because MemoryGame is mutating cards
     //let would have turned model into immutable
@@ -42,7 +44,7 @@ class EmojiMemoryGame: ObservableObject { //used to publish the chenged model to
 //        pairIndex  in
 //        EmojiMemoryGame.emojis[pairIndex]
 //    }
-    var cards: Array<MemoryGame<String>.Card>{
+    var cards: Array<Card>{
         model.cards
     }
     
@@ -52,7 +54,7 @@ class EmojiMemoryGame: ObservableObject { //used to publish the chenged model to
     
     //MARK: - Intent(s)
     
-    func choose(_ card: MemoryGame<String>.Card){
+    func choose(_ card: Card ){
         
         //objectWillChange.send()//sends model changed info to UI
         //replaced by @Published keyword for the model
