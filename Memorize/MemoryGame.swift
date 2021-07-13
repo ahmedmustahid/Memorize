@@ -13,18 +13,29 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
     private(set) var cards: Array<Card> //private(set) makes a variable read only
     
     private var indexOfTheOneAndOnlyFaceUpCard: Int? { //computed properties
-        var faceUpCardIndices = [Int]()
-        for index in cards.indices {
-            if cards[index].isFaceUp {
-                faceUpCardIndices.append(index)
+        get{
+            var faceUpCardIndices = [Int]()
+            for index in cards.indices {
+                if cards[index].isFaceUp {
+                    faceUpCardIndices.append(index)
+                }
+            }
+            if faceUpCardIndices.count == 1 {
+                return faceUpCardIndices.first //returns nil if array empty
+            } else {
+                return nil
             }
         }
-        if faceUpCardIndices.count == 1 {
-            return faceUpCardIndices.first //returns nil if array empty
-        } else {
-            return nil
+        set {
+            for index in cards.indices {
+                if index != newValue { //sets when newValue chosenIndex is assigned
+                //if index != indexOfTheOneAndOnlyFaceUpCard { //should not be set in its own defintion
+                    cards[index].isFaceUp = false
+                } else {
+                    cards[index].isFaceUp = true
+                }
+            }
         }
-        
     }
         
     
@@ -34,22 +45,17 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
             !cards[chosenIndex].isMatched,
             !cards[chosenIndex].isFaceUp
         {
-            
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
-                indexOfTheOneAndOnlyFaceUpCard = nil
+                //indexOfTheOneAndOnlyFaceUpCard = nil
             } else {
-                for index in cards.indices {
-                //for index in 0..<cards.count{
-                    cards[index].isFaceUp = false
-                }
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
         
-           cards[chosenIndex].isFaceUp =true//mutating 'self'(function arg) here;
+           cards[chosenIndex].isFaceUp = true//mutating 'self'(function arg) here;
        }
     }
    
