@@ -74,8 +74,8 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
 extension Array {
     //var oneAndOnly: Int; instead the type will be dontcare type (Element)
     var oneAndOnly: Element? { //has to be a computed var
-        if self.count == 1 {
-            return self.first //returns nil if array empty
+        if count == 1 {
+            return first //returns nil if array empty
         } else {
             return nil
         }
