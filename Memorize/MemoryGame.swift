@@ -15,12 +15,7 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
     private var indexOfTheOneAndOnlyFaceUpCard: Int? { //computed properties
         get{
             let faceUpCardIndices = cards.indices.filter({ cards[$0].isFaceUp })
-
-            if faceUpCardIndices.count == 1 {
-                return faceUpCardIndices.first //returns nil if array empty
-            } else {
-                return nil
-            }
+            return faceUpCardIndices.oneAndOnly
         }
         set {
             for index in cards.indices {
@@ -72,5 +67,17 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
         var isMatched = false
         let content: CardContent //dont care
         let id: Int
+    }
+}
+
+
+extension Array {
+    //var oneAndOnly: Int; instead the type will be dontcare type (Element)
+    var oneAndOnly: Element? { //has to be a computed var
+        if self.count == 1 {
+            return self.first //returns nil if array empty
+        } else {
+            return nil
+        }
     }
 }
