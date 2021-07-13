@@ -12,7 +12,22 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
                                     //MemoryGame is of generic type
     private(set) var cards: Array<Card> //private(set) makes a variable read only
     
-    private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    private var indexOfTheOneAndOnlyFaceUpCard: Int? { //computed properties
+        var faceUpCardIndices = [Int]()
+        for index in cards.indices {
+            if cards[index].isFaceUp {
+                faceUpCardIndices.append(index)
+            }
+        }
+        if faceUpCardIndices.count == 1 {
+            return faceUpCardIndices.first //returns nil if array empty
+        } else {
+            return nil
+        }
+        
+    }
+        
+    
     
     mutating func choose(_ card: Card) {
        if let chosenIndex = cards.firstIndex( where: {$0.id == card.id} ),
@@ -34,7 +49,7 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
         
-           cards[chosenIndex].isFaceUp.toggle()//mutating 'self'(function arg) here;
+           cards[chosenIndex].isFaceUp =true//mutating 'self'(function arg) here;
        }
     }
    
