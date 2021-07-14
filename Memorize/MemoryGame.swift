@@ -20,12 +20,7 @@ struct MemoryGame <CardContent> where CardContent: Equatable { //CardContent arg
         }
         set {
             for index in cards.indices {
-                if index != newValue { //sets when newValue chosenIndex is assigned
-                //if index != indexOfTheOneAndOnlyFaceUpCard { //should not be set in its own defintion
-                    cards[index].isFaceUp = false
-                } else {
-                    cards[index].isFaceUp = true
-                }
+                cards[index].isFaceUp = (index == newValue)
             }
         }
     }
